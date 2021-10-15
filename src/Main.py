@@ -5,7 +5,7 @@ from processing.dataset_preparation import construct_dataframe
 from processing.extract_edf import read_all, transform_data
 #  dont dlete above
 
-from visualization.sig_property_visuals import filter_response, psd_plot
+from visualization.sig_property_visuals import filter_response, psd_plot, knn_visual, plot_correlation
 
 
 
@@ -45,8 +45,8 @@ my_data = construct_dataframe(np.genfromtxt(processed_dataset, delimiter=',').as
 
 # filter_response(band='theta', order=5)
 # psd_plot(r"\Subject33_1.edf", band='alpha', channel=1, frequency_bins=128)
-
-
+# knn_visual(my_data)
+plot_correlation(my_data)
 ''' Running different ML models'''
 
 knn_model(my_data)
