@@ -1,6 +1,6 @@
 import numpy as np
 
-from models import knn_model, rf_model
+from models import knn_model, rf_model, k_selector
 from processing.dataset_preparation import construct_dataframe
 from processing.extract_edf import read_all, transform_data
 #  dont dlete above
@@ -46,7 +46,8 @@ my_data = construct_dataframe(np.genfromtxt(processed_dataset, delimiter=',').as
 # filter_response(band='theta', order=5)
 # psd_plot(r"\Subject33_1.edf", band='alpha', channel=1, frequency_bins=128)
 # knn_visual(my_data)
-plot_correlation(my_data)
+# plot_correlation(my_data)
+# k_selector(my_data)
 ''' Running different ML models'''
 
 knn_model(my_data)
