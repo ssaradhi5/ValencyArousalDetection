@@ -121,3 +121,12 @@ INFO: 2021-10-16 00:32:15,205: F Score: 0.957
 INFO: 2021-10-16 00:32:15,205: RMSE: 0.215
 INFO: 2021-10-16 00:32:15,206: AUC: 0.953
 INFO: 2021-10-16 00:32:15,206: -------------------------------
+INFO: 2021-10-16 00:35:34,319: NumExpr defaulting to 8 threads.
+INFO: 2021-10-18 00:18:03,193: NumExpr defaulting to 8 threads.
+INFO: 2021-10-18 00:26:30,629: NumExpr defaulting to 8 threads.
+INFO: 2021-10-18 00:27:30,247: NumExpr defaulting to 8 threads.
+INFO: 2021-10-18 00:42:15,549: NumExpr defaulting to 8 threads.
+INFO: 2021-10-18 00:42:40,092: NumExpr defaulting to 8 threads.
+INFO: 2021-10-18 00:44:38,189: NumExpr defaulting to 8 threads.
+INFO: 2021-10-18 00:45:42,200: NumExpr defaulting to 8 threads.
+INFO: 2021-10-18 00:46:38,758: NumExpr defaulting to 8 threads.

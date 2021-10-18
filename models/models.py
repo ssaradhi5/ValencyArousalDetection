@@ -5,7 +5,7 @@ import numpy as np
 
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error, accuracy_score, f1_score, roc_auc_score, auc, roc_curve
+from sklearn.metrics import mean_squared_error, accuracy_score, f1_score, auc, roc_curve
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import log_loss
 from src.constants import log

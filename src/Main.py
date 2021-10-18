@@ -1,16 +1,13 @@
 import numpy as np
 
 from models import knn_model, rf_model, k_selector
-from processing.dataset_preparation import construct_dataframe
+from processing.dataset_preparation import construct_dataframe, pca_analysis
 from processing.extract_edf import read_all, transform_data
 #  dont dlete above
 
 from visualization.sig_property_visuals import filter_response, psd_plot, knn_visual, plot_correlation
 
-
-
 # sys.path.append(r"C:\Users\srika\Desktop\Flosonics Backup\URA\Arithmetic\DataAttributes\ElectrodeAttributes.py")
-
 
 """ The data files with EEG are provided in EDF (European Data Format) format. Each folder contains two recording files per subject:
 with “_1” postfix -- the recording of the background EEG of a subject (before mental arithmetic task)
@@ -40,16 +37,18 @@ about each subject (gender, age, job, date of recording). """
 processed_dataset = r"C:\Users\srika\Desktop\Flosonics Backup\URA\Arithmetic\data\processed_datasets\TimeFeature.csv"
 my_data = construct_dataframe(np.genfromtxt(processed_dataset, delimiter=',').astype('uint32'))
 
+'''Data check'''
+# my_data.describe()
+# pca_analysis(my_data)
+
 
 ''' data visualization'''
-
 # filter_response(band='theta', order=5)
 # psd_plot(r"\Subject33_1.edf", band='alpha', channel=1, frequency_bins=128)
 # knn_visual(my_data)
 # plot_correlation(my_data)
 # k_selector(my_data)
 ''' Running different ML models'''
-
 knn_model(my_data)
 rf_model(my_data)
 
