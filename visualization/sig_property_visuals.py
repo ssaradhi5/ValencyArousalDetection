@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 from scipy import signal
 from processing.build_features import signal_properties
 from pyedflib import EdfReader
+from matplotlib.colors import ListedColormap
+from sklearn import neighbors
+
 import seaborn as sns
 
 def filter_response(band, order):
@@ -79,8 +82,7 @@ def plot_correlation(dataset):
 
 def knn_visual(dataset):
     features, labels = dataset.iloc[:,0:63].values, dataset.iloc[:,63].values
-    from matplotlib.colors import ListedColormap
-    from sklearn import neighbors
+
 
     n_neighbors = 3
     # we only take the first two features. We could avoid this ugly

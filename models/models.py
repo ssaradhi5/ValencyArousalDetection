@@ -86,14 +86,13 @@ def metrics(labels, predictions, model_title):
     rmse = math.sqrt(mean_squared_error(labels, predictions))
     fpr, tpr, thresholds = roc_curve(labels, predictions)
     roc_auc = auc(fpr, tpr)
-    # plot_roc(fpr, tpr, model_title)
-    # cap_curve(predictions, labels, model_title)
+    plot_roc(fpr, tpr, model_title)
+    cap_curve(predictions, labels, model_title)
 
     logger.info("Accuracy: {:.3f}".format(accuracy))
     logger.info("F Score: {:.3f}".format(f1))
     logger.info("RMSE: {:.3f}".format(rmse))
     logger.info("AUC: {:.3f}".format(roc_auc))
-    logger.info("-------------------------------")
     return
 
 def k_selector(dataset):
