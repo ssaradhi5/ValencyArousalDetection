@@ -9,6 +9,7 @@ from sklearn import neighbors
 
 import seaborn as sns
 
+# filter response for a given order and brain band (frequency band pass)
 def filter_response(band, order):
         fs = 500
         ord = order
@@ -19,7 +20,6 @@ def filter_response(band, order):
             'delta': [35, 45],
             'gamma': [0.5,4]
         }
-
         brainwave = brainwaves[band]
         low_cut = brainwave[0]
         high_cut = brainwave[1]
@@ -27,20 +27,24 @@ def filter_response(band, order):
         low = low_cut / nyq
         high = high_cut / nyq
         b, a = signal.butter(ord, [low, high], btype='bandpass')
-        w, h = signal.freqs(b, a)
-        plt.semilogx(w, 20 * np.log10(abs(h)))
-        plt.title('Butterworth filter frequency response')
+        w, h = signal.freqz(b, a)
+        # plt.semilogx(w, 20 * np.log10(abs(h)))
+        plt.plot((fs * 0.5 / np.pi) * w, abs(h), label="cutoff freqs")
+        plt.title('Butterworth filter frequency response of the ' + str(band) + ' band')
         plt.xlabel('Frequency [radians / second]')
         plt.ylabel('Amplitude [dB]')
         plt.margins(0, 0.1)
         plt.grid(which='both', axis='both')
-        plt.axvline(100, color='green')  # cutoff frequency
+        plt.axis('tight')
+        plt.axvline(low_cut, color='green')  # cutoff frequency
+        plt.axvline(high_cut, color='green')  # cutoff frequency
+        plt.legend(loc='upper left')
         plt.show()
         return
 
+# power spectral density plot for a given brain band (frequency band pass) and # of frequency bins
 def psd_plot(sub, band, channel, frequency_bins=128):
     str_directory = r"C:\Users\srika\Desktop\Flosonics Backup\URA\Arithmetic\data\raw_physio_data"
-
     brainwaves = {
         'alpha': 0,
         'beta': 1,
@@ -63,16 +67,18 @@ def psd_plot(sub, band, channel, frequency_bins=128):
     plt.show()
     return
 
+# correlation calculations for heatmap output
 def plot_correlation(dataset):
-
     # Triangle Correlation of Independent Variables with the Dependent Variable
     mask = np.triu(np.ones_like(dataset.corr(), dtype=np.bool))
     figure1 = plt.figure()
     correlation = sns.heatmap(dataset.corr(), annot=False, vmax = 1, vmin = -1, mask=mask,cmap='BrBG')
     print(correlation)
+    plt.title('Correlation Heatmap')
     plt.show()
     figure1.savefig(r"C:\Users\srika\Desktop\Flosonics Backup\URA\Arithmetic\results\correlation_heatmap.png")
     figure2 = plt.figure()
+    plt.title('Correlation of Independent Var with Dependent Var')
     # Correlation of Independent Variables with the Dependent Variable
     correlate_ind_dep = sns.heatmap(dataset.corr()[['Labels']].sort_values(by='Labels'), vmin=-1, vmax=1, annot=True, cmap='BrBG')
     print(correlate_ind_dep)
@@ -80,18 +86,15 @@ def plot_correlation(dataset):
     figure2.savefig(r"C:\Users\srika\Desktop\Flosonics Backup\URA\Arithmetic\results\correlation_ind_dep.png")
     return
 
+# knn graph of two features
 def knn_visual(dataset):
-    features, labels = dataset.iloc[:,0:63].values, dataset.iloc[:,63].values
-
-
+    features, labels = dataset.iloc[:,:-1].values, dataset.iloc[:,-1].values
     n_neighbors = 3
     # we only take the first two features. We could avoid this ugly
     # slicing by using a two-dim dataset
     X = features[:,:2]
     y = labels
-
     h = .02  # step size in the mesh
-
     # Create color maps
     cmap_light = ListedColormap(['orange', 'cyan'])
     cmap_bold = ['darkorange', 'darkblue']
@@ -119,15 +122,9 @@ def knn_visual(dataset):
                         palette=cmap_bold, alpha=1.0, edgecolor="black")
         plt.xlim(xx.min(), xx.max())
         plt.ylim(yy.min(), yy.max())
-        plt.title("3-Class classification (k = %i, weights = '%s')"
+        plt.title("Binary classification (k = %i, weights = '%s')"
                   % (n_neighbors, weights))
-        plt.xlabel('slat')
-        plt.ylabel('slime')
-
+        plt.xlabel('Ch 1 beta band')
+        plt.ylabel('Ch 1 alpha band')
     plt.show()
-
     return
-
-
-
-

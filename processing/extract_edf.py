@@ -8,11 +8,10 @@ from pyedflib import EdfReader
 b_directory = os.fsencode(r"C:\Users\srika\Desktop\URA\Arithmetic\raw_physio_data")
 str_directory = r"C:\Users\srika\Desktop\Flosonics Backup\URA\Arithmetic\data\raw_physio_data"
 
+# Go through list of all subjects and calculate features (power spectral densities, etc.) and then create new dataset
 def transform_data(all_tests):
-
-    # 21 channel x 3 brain bands x 2 classes * 30 subjects = 5040
-    # 84 columns because brain bands x channels are features and one label (0s and 1s)
-
+    # 30 rows x 2 = 60 rows
+    # 21 channels x 3 brain bands = 63 columns
     combined = np.full([60, 63], None)
     column = [None]*64
     for subject in all_tests:

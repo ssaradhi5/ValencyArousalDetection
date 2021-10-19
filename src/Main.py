@@ -20,14 +20,16 @@ about each subject (gender, age, job, date of recording). """
 # raw_dataset = read_all()
 # process_dataset = transform_data(raw_dataset)
 processed_dataset = r"C:\Users\srika\Desktop\Flosonics Backup\URA\Arithmetic\data\processed_datasets\TimeFeature.csv"
-my_data = construct_dataframe(np.genfromtxt(processed_dataset, delimiter=',').astype('uint32'))
+data = construct_dataframe(np.genfromtxt(processed_dataset, delimiter=',').astype('uint32'))
 
 '''Feature Analysis'''
-my_data.describe()
-pca_analysis(my_data)
-k_selector(my_data)
-plot_correlation(my_data)
+data.describe()
+pca_analysis(data)
+plot_correlation(data)
 
 ''' Running different ML models'''
-knn_model(my_data)
-rf_model(my_data)
+knn_model(data)
+rf_model(data)
+
+'''Tuning'''
+k_selector(data)

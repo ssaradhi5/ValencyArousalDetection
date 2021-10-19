@@ -7,7 +7,6 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, accuracy_score, f1_score, auc, roc_curve
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import log_loss
 from src.constants import log
 from matplotlib import pyplot as plt
 
@@ -16,8 +15,9 @@ dirname = os.path.dirname(__file__)
 path = r"C:\Users\srika\Desktop\Flosonics Backup\URA\Arithmetic\results"
 logger = log(path=path, file="ml_metrics.logs")
 
+# split train,test and fit KNN model and gather metrics
 def knn_model(dataset):
-    features, labels = dataset.iloc[:,0:63].values, dataset.iloc[:,63].values
+    features, labels = dataset.iloc[:,:-1].values, dataset.iloc[:,-1].values
     feature_train, feature_test, label_train, label_test = train_test_split(features, labels, test_size = 0.3)
     knn = KNeighborsClassifier(n_neighbors=2)
     knn.fit(feature_train, label_train)
@@ -30,8 +30,9 @@ def knn_model(dataset):
     metrics(label_test, predictions, "KNN")
     return
 
+# split train,test and fit RF model and gather metrics
 def rf_model(dataset):
-    features, labels = dataset.iloc[:,0:63].values, dataset.iloc[:,63].values
+    features, labels = dataset.iloc[:,:-1].values, dataset.iloc[:,-1].values
     feature_train, feature_test, label_train, label_test = train_test_split(features, labels, test_size = 0.3)
     rf = RandomForestClassifier(n_estimators=100)
     rf.fit(feature_train, label_train)
@@ -43,15 +44,13 @@ def rf_model(dataset):
     metrics(label_test, predictions, "RF")
     return
 
+# Calculate CAP metric
 def cap_curve(labels, predictions, model_title):
-    # CAP curve
-
     total = len(labels)
     class_1_count = np.sum(labels)
     plt.figure(figsize=(20, 12))
     plt.plot([0, total], [0, class_1_count], c='r', linestyle='--', label='Random Model')
     plt.plot([0, class_1_count, total], [0, class_1_count, class_1_count], c='grey', linewidth=2, label='Perfect Model')
-
     model_y = [y for _, y in sorted(zip(predictions, labels), reverse=True)]
     y_values = np.append([0], np.cumsum(model_y))
     x_values = np.arange(0, total + 1)
@@ -68,8 +67,8 @@ def cap_curve(labels, predictions, model_title):
     plt.show()
     return
 
+#  ROC curve
 def plot_roc(fpr, tpr, model_title):
-    #  ROC curve
     plt.figure(figsize=(20, 12))
     plt.plot([0, 1], [0, 1], 'r--')
     plt.plot(fpr, tpr, c='g', label=model_title, linewidth=4)
@@ -80,6 +79,7 @@ def plot_roc(fpr, tpr, model_title):
     plt.show()
     return
 
+# calculate accuracy, F1 Score, RMSE, CAP, ROC-AUC
 def metrics(labels, predictions, model_title):
     accuracy = accuracy_score(labels, predictions)
     f1 = f1_score(labels, predictions)
@@ -88,15 +88,16 @@ def metrics(labels, predictions, model_title):
     roc_auc = auc(fpr, tpr)
     plot_roc(fpr, tpr, model_title)
     cap_curve(predictions, labels, model_title)
-
+    # save the metrics
     logger.info("Accuracy: {:.3f}".format(accuracy))
     logger.info("F Score: {:.3f}".format(f1))
     logger.info("RMSE: {:.3f}".format(rmse))
     logger.info("AUC: {:.3f}".format(roc_auc))
     return
 
+# recursively test each K-value for lowest accuracy (ignore k = 1)
 def k_selector(dataset):
-    features, labels = dataset.iloc[:, 0:63].values, dataset.iloc[:, 63].values
+    features, labels = dataset.iloc[:,:-1].values, dataset.iloc[:,-1].values
     feature_train, feature_test, label_train, label_test = train_test_split(features, labels, test_size=0.3)
     error_rate = []
     for i in range(1, 40):

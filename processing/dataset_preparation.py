@@ -1,5 +1,6 @@
+import logging
+
 import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
 
 
@@ -88,6 +89,7 @@ def pca_analysis(data):
 
     per_var = np.round(pca.explained_variance_ratio_*100, decimals=1)
     labels = ['PC' + str(x) for x in range(1, len(per_var) +1)]
+    logging.info('Explained variation per principal component: {}'.format(per_var))
 
     figure1 = plt.figure()
     plt.bar(x=range(1, len(per_var) +1), height=per_var, tick_label=labels)
